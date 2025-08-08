@@ -4,12 +4,9 @@ const getNotes =  function(){
     return 'Your notes...';
 }
 
-const addNote = function(title, body){
+const addNote = (title, body) => {
     const notes = loadNotes();
-
-    const duplicateNotes = notes.filter(function(note){
-        return note.title === title;
-    })
+    const duplicateNotes = notes.filter(note => note.title === title);
     if(duplicateNotes.length === 0){
         console.log('Adding a new note...');
         notes.push({
@@ -26,11 +23,11 @@ const addNote = function(title, body){
     saveNotes(notes);
 }
 
-const saveNotes = function(notes){
+const saveNotes = (notes)=>{
     const dataJSON = JSON.stringify(notes);
     fs.writeFileSync('notes.json', dataJSON);
 }
-const loadNotes = function(){
+const loadNotes = ()=>{
     try {
         let dataBuffer = fs.readFileSync('notes.json');
         let dataJSON = dataBuffer.toString();
@@ -40,11 +37,9 @@ const loadNotes = function(){
         return [];
     }
 }
-const removeNote = function(title){
+const removeNote = (title)=>{
     const notes = loadNotes();
-    const notesToKeep = notes.filter(function(note){
-        return note.title !== title;
-    });
+    const notesToKeep = notes.filter(note => note.title !== title);
 
     if(notes.length > notesToKeep.length){
         console.log(chalk.bgGreen('Note removed'));
