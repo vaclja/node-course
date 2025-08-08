@@ -19,10 +19,11 @@ yargs(hideBin(process.argv))
             type: 'string'
         }
     },
-    handler: function(argv) {
+    handler:(argv)=>{
        notes.addNote(argv.title, argv.body);
     }
 })
+
 .command({
     command: 'remove',
     describe: 'Remove a note',
@@ -33,22 +34,30 @@ yargs(hideBin(process.argv))
             type: 'string'
         }
     },
-    handler: function(argv) {
+    handler: (argv) => {
         notes.removeNote(argv.title);
     }
 })
 .command({  command: 'list',
     describe: 'List your notes',
 
-    handler: function() {
-        console.log('Listing all notes...');
+    handler: () => {
+        notes.listNotes();
     }
 })
 .command({
     command: 'read',
     describe: 'Read a note',
-    handler: function() {
-        console.log('Reading a note...');
+    builder: {
+        title: {
+            describe: 'Note title',
+            demandOption: true,
+            type: 'string'
+        }
+    },
+    handler: (argv) => {
+        console.log(argv);
+        notes.readNote(argv.title);
     }
 })
 .parse();
