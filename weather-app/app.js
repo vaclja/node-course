@@ -3,15 +3,15 @@ import forecast from './utils/forecast.js';
 
 let city = process.argv[2];
 if(city){
-  geocode(city, (error, data)=>{
+  geocode(city, (error, {latitude, longitude, location})=>{
     if(error){
       return console.log('Error', error);
     }
-      forecast(data.latitude, data.longitude, (error, forecastData) => {
+      forecast(latitude, longitude, (error, forecastData) => {
         if(error){
           return console.log('Error', error);
         }
-        console.log(`It's currently ${forecastData.current.temperature} degrees, ${forecastData.current.weather_descriptions[0]} in ${forecastData.location.name}.`);
+        console.log(`It's currently ${forecastData.current.temperature} degrees, ${forecastData.current.weather_descriptions[0]} in ${location}.`);
     });
   });
 }
