@@ -2,7 +2,8 @@ import path from 'path';
 import express from 'express';
 import {fileURLToPath} from 'url'; 
 import hbs from 'hbs';
-
+import geocode from './utils/geocode.js';
+import forecast from './utils/forecast.js';
 
 // Define paths for static files
 const __filename = fileURLToPath(import.meta.url);
@@ -52,12 +53,24 @@ app.get('/weather', (req,res) =>{
             error:'You must provide an address'
         })
     };
-    res.send({
-        forecast:"polojasno",
-        location:"Kravaře",
-        address:req.query.address
 
-    });
+    geocode(req.query.address, (error, {latitude, longitude, location} = {}) =>{
+        if(error){
+            return res.send({error});
+        }
+        forecast(latitude, longitude, (error, forecastData)=>{
+            if(error){
+                return res.send({error});
+            }
+            res.send({
+                forecast:forecastData.current.condition.text,
+                temperature: forecastData.current.temp_c,
+                location,
+                address:req.query.address
+            })
+        })
+    })
+
 });
 app.get('/products', (req,res)=>{
     if(!req.query.search){
